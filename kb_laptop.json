@@ -1,0 +1,101 @@
+{
+  "facts": {
+    "kabel_adaptor_rusak": {
+      "type": "input",
+      "question": "Apakah kabel atau adaptor terlihat mengalami kerusakan fisik?"
+    },
+    "adaptor_unknown": {
+      "type": "input",
+      "question": "Apakah BIOS menunjukkan adaptor Unknown atau daya adaptor tidak sesuai?"
+    },
+    "tidak_mengisi": {
+      "type": "input",
+      "question": "Apakah laptop sama sekali tidak mengisi daya?"
+    },
+    "port_bermasalah": {
+      "type": "input",
+      "question": "Apakah sambungan adaptor ke port laptop tidak stabil atau port terindikasi bermasalah?"
+    },
+    "windows_tidak_mengenali_adaptor": {
+      "type": "input",
+      "question": "Apakah Windows tidak mengenali adaptor meskipun sudah terhubung?"
+    },
+    "pengisian_dibatasi": {
+      "type": "input",
+      "question": "Apakah pengisian dibatasi oleh pengaturan BIOS atau Windows menampilkan Fully Smart charged?"
+    },
+    "baterai_buruk": {
+      "type": "input",
+      "question": "Apakah kesehatan baterai menunjukkan Fair atau Poor, atau diagnostik baterai berulang kali menunjukkan kesalahan?"
+    },
+    "indikasi_masalah_adaptor": {
+      "type": "derived"
+    }
+  },
+
+  "rules": [
+    {
+      "id": "R1",
+      "if": ["kabel_adaptor_rusak"],
+      "then": "indikasi_masalah_adaptor",
+      "source": ["S1"]
+    },
+    {
+      "id": "R2",
+      "if": ["adaptor_unknown"],
+      "then": "indikasi_masalah_adaptor",
+      "source": ["S1"]
+    },
+    {
+      "id": "R3",
+      "if": ["indikasi_masalah_adaptor", "tidak_mengisi"],
+      "then": "C1",
+      "source": ["S1"]
+    },
+    {
+      "id": "R4",
+      "if": ["port_bermasalah"],
+      "then": "C2",
+      "source": ["S1"]
+    },
+    {
+      "id": "R5",
+      "if": ["windows_tidak_mengenali_adaptor"],
+      "then": "C3",
+      "source": ["S1"]
+    },
+    {
+      "id": "R6",
+      "if": ["pengisian_dibatasi"],
+      "then": "C4",
+      "source": ["S1", "S2"]
+    },
+    {
+      "id": "R7",
+      "if": ["baterai_buruk"],
+      "then": "C5",
+      "source": ["S1"]
+    }
+  ],
+
+  "conclusions": {
+    "C1": "Kemungkinan masalah pada adaptor atau kabel pengisi daya.",
+    "C2": "Kemungkinan masalah pada port atau sambungan pengisian daya.",
+    "C3": "Kemungkinan masalah pada suplai daya, sambungan, atau rangkaian pengisian daya.",
+    "C4": "Pengisian daya dibatasi oleh pengaturan BIOS atau fitur Smart Charging.",
+    "C5": "Kemungkinan kesehatan baterai menurun."
+  },
+
+  "sources": {
+    "S1": {
+      "title": "How to Troubleshoot AC Adapter Issues on a Dell Laptop",
+      "publisher": "Dell Support", 
+      "url": "https://www.dell.com/support/kbdoc/en-us/000125125/how-to-troubleshoot-ac-adapter-issues"
+    },
+    "S2": {
+      "title": "Use Smart charging in Windows",
+      "publisher": "Microsoft Support",
+      "url": "https://support.microsoft.com/en-us/windows/experience/power-battery/use-smart-charging-in-windows"
+    }
+  }
+}
